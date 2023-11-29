@@ -1,7 +1,11 @@
 package lotto;
 
-import lotto.controller.LottoController;
-import lotto.model.LottoGenerator;
+import java.util.List;
+import lotto.controller.InputController;
+import lotto.controller.OutputController;
+import lotto.model.Budget;
+import lotto.model.Lotto;
+import lotto.model.WinningLotto;
 import lotto.view.InputView;
 import lotto.view.OutputView;
 
@@ -11,8 +15,16 @@ public class Application {
 
         InputView inputView = new InputView();
         OutputView outputView = new OutputView();
-        LottoController lottoController = new LottoController(inputView, outputView);
 
-        lottoController.run();
+        InputController inputController = new InputController(inputView);
+        OutputController outputController = new OutputController(outputView);
+
+        Budget budget = inputController.requestBudget();
+        List<Lotto> purchasedLottos = outputController.purchaseLottos(budget);
+
+        Lotto winningNumbers = inputController.requestWinningNumbers();
+        WinningLotto winningLottoWithBonus = inputController.getValidWinningLotto(winningNumbers);
+
+        outputController.printLottoResult(purchasedLottos, winningLottoWithBonus, budget);
     }
 }
